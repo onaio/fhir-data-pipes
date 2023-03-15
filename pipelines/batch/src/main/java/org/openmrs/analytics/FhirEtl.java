@@ -78,6 +78,11 @@ public class FhirEtl {
         options.getFhirServerUrl(),
         options.getFhirServerUserName(),
         options.getFhirServerPassword(),
+        options.getOidConnectUrl(),
+        options.getClientId(),
+        options.getClientSecret(),
+        options.getOAuthUsername(),
+        options.getOAuthPassword(),
         fhirContext);
   }
 
@@ -267,7 +272,7 @@ public class FhirEtl {
   // #278).
   static Pipeline buildHapiJdbcFetch(
       FhirEtlOptions options, DatabaseConfiguration dbConfig, FhirContext fhirContext)
-      throws PropertyVetoException {
+      throws PropertyVetoException, IOException {
     boolean foundResource = false;
     Pipeline pipeline = Pipeline.create(options);
     JdbcConnectionUtil jdbcConnectionUtil = createJdbcConnection(options, dbConfig);

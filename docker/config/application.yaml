@@ -16,7 +16,13 @@
 
 # This config is meant to work with `compose-controller-spark-sql.yaml`.
 fhirdata:
-  fhirServerUrl: "http://hapi-server:8080/fhir"
+  fhirServerUrl: ""
+  oidConnectUrl: ""
+  clientId: ""
+  clientSecret: ""
+  oAuthUsername: ""
+  oAuthPassword: ""
+
   dbConfig: "config/hapi-postgres-config_local.json"
   dwhRootPrefix: "/dwh/controller_DWH"
   thriftserverHiveConfig: "config/thriftserver-hive-config_local.json"

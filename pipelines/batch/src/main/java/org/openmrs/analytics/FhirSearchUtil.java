@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Google LLC
+ * Copyright 2020-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -76,7 +77,8 @@ public class FhirSearchUtil {
    * @param resourceList the resource types to be processed
    * @return a Map storing the counts of each resource type
    */
-  public Map<String, Integer> searchResourceCounts(String resourceList, String since) {
+  public Map<String, Integer> searchResourceCounts(String resourceList, String since)
+      throws IOException {
     HashSet<String> resourceTypes = new HashSet<String>(Arrays.asList(resourceList.split(",")));
     HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
     for (String resourceType : resourceTypes) {
@@ -154,7 +156,7 @@ public class FhirSearchUtil {
     return selfLink;
   }
 
-  private IQuery<Bundle> makeQueryForResource(String resourceType, int count) {
+  private IQuery<Bundle> makeQueryForResource(String resourceType, int count) throws IOException {
     IGenericClient client = openmrsUtil.getSourceClient(true);
     return client
         .search()
@@ -179,7 +181,8 @@ public class FhirSearchUtil {
     return Lists.newArrayList(dateRange);
   }
 
-  private IQuery<Bundle> makeQueryWithDate(String resourceType, FhirEtlOptions options) {
+  private IQuery<Bundle> makeQueryWithDate(String resourceType, FhirEtlOptions options)
+      throws IOException {
     IQuery<Bundle> searchQuery = makeQueryForResource(resourceType, options.getBatchSize());
     if (!options.getActivePeriod().isEmpty()) {
       List<String> dateRange = getDateRange(options.getActivePeriod());
@@ -200,7 +203,8 @@ public class FhirSearchUtil {
     return searchQuery;
   }
 
-  Map<String, List<SearchSegmentDescriptor>> createSegments(FhirEtlOptions options) {
+  Map<String, List<SearchSegmentDescriptor>> createSegments(FhirEtlOptions options)
+      throws IOException {
     if (options.getBatchSize() > 100) {
       // TODO: Probe this value from the server and set the maximum automatically.
       log.warn(
@@ -258,7 +262,7 @@ public class FhirSearchUtil {
     return segmentMap;
   }
 
-  public Set<String> findPatientAssociatedResources(Set<String> resourceTypes) {
+  public Set<String> findPatientAssociatedResources(Set<String> resourceTypes) throws IOException {
     // Note this can also be done by fetching server's `metadata` and parsing the
     // CapabilityStatement.
     Set<String> patientAssociatedResources = Sets.newHashSet();
@@ -291,7 +295,7 @@ public class FhirSearchUtil {
   }
 
   Bundle searchByPatientAndLastDate(
-      String resourceType, String patientId, String lastDate, int count) {
+      String resourceType, String patientId, String lastDate, int count) throws IOException {
     IGenericClient client = openmrsUtil.getSourceClient(true);
     IQuery<Bundle> query =
         client
