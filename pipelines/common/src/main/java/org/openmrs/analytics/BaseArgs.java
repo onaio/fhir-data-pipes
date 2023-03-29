@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Google LLC
+ * Copyright 2020-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,31 @@ public class BaseArgs {
       names = {"--fhirServerUrl"},
       description = "Fhir source server base Url")
   public String fhirServerUrl = "http://localhost:8099/openmrs/ws/fhir2/R4";
+
+  @Parameter(
+      names = {"--oidConnectUrl"},
+      description = "OAuth OIDC Connect URL.")
+  public String oidConnectUrl = "";
+
+  @Parameter(
+      names = {"--clientId"},
+      description = "Oauth Client ID.")
+  public String clientId = "";
+
+  @Parameter(
+      names = {"--clientSecret"},
+      description = "OAuth Client Secret.")
+  public String clientSecret = "";
+
+  @Parameter(
+      names = {"--oAuthUsername"},
+      description = "OAuth Password Credentials Username.")
+  public String oAuthUsername = "";
+
+  @Parameter(
+      names = {"--oAuthPassword"},
+      description = "OAuth Password Credentials Password.")
+  public String oAuthPassword = "";
 
   @Parameter(
       names = {"--fhirSinkPath"},
