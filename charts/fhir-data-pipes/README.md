@@ -164,6 +164,17 @@ service:
       protocol: TCP
       name: hive
 
+# For LDAP ensure that user has the attribute `uid` on its DN.
+# As of now the hive jdbc credentials are not parsed on the pipeline code, as a workaround append the credentials on the `databaseName` credentials as follows:
+#thriftserver:
+#  hive:
+#    databaseService: "hive2"
+#    databaseHostName: "fhir-data-pipes"
+#    databasePort: "10000"
+#    databaseUser: "user" (not working now)
+#    databasePassword: "password" (not working as of now)
+#    databaseName: "default;user=<userid>;password=<password>"
+
 hiveSiteConfig: |
   <?xml version="1.0"?>
   <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
